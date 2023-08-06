@@ -41,11 +41,12 @@ def scrape_all_names():
             names_df.write_parquet(file=f"name_files/mannanafnaskra/starting_with_{file_l}.parquet")
 
 
-def load_name_frequencies():
+def load_name_frequencies() -> tuple[dict[str,int],dict[str,int]]:
     """
     curl https://hagstofan.s3.amazonaws.com/media/public/names.json > name_files/hagstofan.json
     Gögn hagstofunnar: https://hagstofan.s3.amazonaws.com/media/public/names.json
     Fengið af þessari síðu: https://hagstofa.is/talnaefni/ibuar/faeddir-og-danir/nofn/
+    Skilar tuple af dictionaries, þar sem lyklarnir eru nöfn, gildin er fjöldi
     """
     with open("name_files/hagstofa.json") as f:
         hagstofa = json.load(f)
@@ -54,7 +55,7 @@ def load_name_frequencies():
         return first_names, second_names
 
 
-def load_all_names(letter=None):
+def load_all_names(letter=None) -> pl.DataFrame:
     if letter:
         return pl.read_parquet(source=f"name_files/mannanafnaskra/starting_with_{letter}.parquet")
     return pl.read_parquet(source="name_files/mannanafnaskra/*")

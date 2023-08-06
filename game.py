@@ -2,6 +2,7 @@ import polars as pl
 import streamlit as st
 
 from names import get_random_name, load_all_names, load_name_frequencies
+from data import insert_score, Score, get_all_scores
 
 col1, col2, col3 = st.columns(3)
 player = col1.radio("Foreldri", options=["Stefán", "Unnur"])
@@ -37,19 +38,21 @@ first_name, second_name = get_random_name(boys, first_names, second_names, p_two
 full_name = " ".join((n for n in [first_name, second_name, surname] if n))
 st.markdown(f"## {full_name}")
 
-if st.button("Nýtt nafn", type="secondary"):
-    st.experimental_rerun()
+if st.checkbox("Give scores") and not second_name:
+    print(f"{first_name=}")
+    col1, col2, col3 = st.columns([1,1,1])
+    col1.button("Nei", type="secondary", on_click=insert_score, args=(player, first_name, gender, Score.NO))
+    col2.button("Já", type="secondary", on_click=insert_score, args=(player, first_name, gender, Score.YES))
+    col3.button("Kannski", type="secondary", on_click=insert_score, args=(player, first_name, gender, Score.MAYBE))
+else:
+    st.button("Nýtt nafn")
 
-# col1, col2, col3 = st.columns([1,1,1])
-# if col1.button("Nei", type="secondary"):
-# st.experimental_rerun()
-# if col2.button("Já", type="secondary"):
-# st.experimental_rerun()
-# if col3.button("Kannski", type="secondary"):
-# st.experimental_rerun()
 
 if second_name:
     st.markdown(f"Algengi fyrsta nafns: {first_names.get(first_name,0)}")
     st.markdown(f"Algengi annars nafns: {second_names.get(second_name,0)}")
 else:
     st.markdown(f"Algengi nafns: {first_names.get(first_name,0)}")
+
+with st.expander("Atkvæði"):
+    st.table(get_all_scores())
