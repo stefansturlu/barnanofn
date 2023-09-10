@@ -8,14 +8,14 @@ CONNECTION_STRING = 'sqlite://' + DB_NAME
 
 class Score(Enum):
     NO = -1
-    MAYBE = 0
+    MIDDLE_NAME = 0
     YES = 1
 
 
 def create_name_tables():
     con = sqlite3.connect(DB_NAME)
     cur = con.cursor()
-    cur.execute("CREATE TABLE IF NOT EXISTS name_scores(parent, name, gender, score)")
+    cur.execute("CREATE TABLE IF NOT EXISTS name_scores(round, parent, name, gender, score)")
 
 
 def insert_score(parent: str, name: str, gender: str, score: Score):
@@ -37,15 +37,20 @@ def delete_scores_for_parent(parent: str):
 
 def get_all_scores():
     name_scores = pl.read_database("SELECT * FROM name_scores", CONNECTION_STRING)
-    print(name_scores)
+    return name_scores
+
+def get_not_declined_scores():
+    name_scores = pl.read_database("SELECT * FROM name_scores where score>=0 order by name, parent", CONNECTION_STRING)
     return name_scores
 
 
 if __name__=="__main__":
     print("Running data.py")
+    create_name_tables()
     print(get_all_scores())
     print("FIN")
     delete_scores_for_parent("Stefán")
+    delete_scores_for_parent("Unnur")
 
 
 
