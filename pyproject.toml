@@ -1,0 +1,23 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "barnanofn"
+version = "0.1.0"
+description = "Barnanöfn"
+requires-python = ">=3.10"
+dependencies = [
+    "polars>=1.33.0",
+    "requests>=2.32.5",
+    "streamlit>=1.49.1",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.17.1",
+    "ruff>=0.12.12",
+]
