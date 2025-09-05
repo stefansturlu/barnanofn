@@ -37,7 +37,7 @@ if STATUS == "Haf":
 ALREADY_RATED_KEY = "already_rated_key"
 if ALREADY_RATED_KEY not in st.session_state:
     all_scores_df = get_all_scores()
-    df_grouped = all_scores_df.groupby("parent").agg(pl.col("name"))
+    df_grouped = all_scores_df.group_by("parent").agg(pl.col("name"))
     print("df_grouped")
     print(df_grouped)
     already_rated = {row[0]: set(row[1]) for row in df_grouped.iter_rows()}

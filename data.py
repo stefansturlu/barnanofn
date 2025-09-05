@@ -18,10 +18,10 @@ def create_name_tables():
     cur.execute("CREATE TABLE IF NOT EXISTS name_scores(round, parent, name, gender, score)")
 
 
-def insert_score(parent: str, name: str, gender: str, score: Score):
+def insert_score(parent: str, name: str, gender: str, score: Score, round: int = 1):
     con = sqlite3.connect(DB_NAME)
     cur = con.cursor()
-    ins = f"INSERT INTO name_scores VALUES ('{parent}', '{name}', '{gender}', {score.value})"
+    ins = f"INSERT INTO name_scores VALUES ({round}, '{parent}', '{name}', '{gender}', {score.value})"
     print(f"Running {ins}" )
     cur.execute(ins)
     con.commit()
@@ -36,11 +36,11 @@ def delete_scores_for_parent(parent: str):
 
 
 def get_all_scores():
-    name_scores = pl.read_database("SELECT * FROM name_scores", CONNECTION_STRING)
+    name_scores = pl.read_database_uri("SELECT * FROM name_scores", CONNECTION_STRING)
     return name_scores
 
 def get_not_declined_scores():
-    name_scores = pl.read_database("SELECT * FROM name_scores where score>=0 order by name, parent", CONNECTION_STRING)
+    name_scores = pl.read_database_uri("SELECT * FROM name_scores where score>=0 order by name, parent", CONNECTION_STRING)
     return name_scores
 
 

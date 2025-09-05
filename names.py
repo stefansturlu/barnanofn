@@ -48,7 +48,7 @@ def load_name_frequencies() -> tuple[dict[str,int],dict[str,int]]:
     Fengið af þessari síðu: https://hagstofa.is/talnaefni/ibuar/faeddir-og-danir/nofn/
     Skilar tuple af dictionaries, þar sem lyklarnir eru nöfn, gildin er fjöldi
     """
-    with open("name_files/hagstofa.json") as f:
+    with open("name_files/hagstofan.json") as f:
         hagstofa = json.load(f)
         first_names = {n["Nafn"].capitalize(): int(n["Fjoldi1"]) for n in hagstofa}
         second_names = {n["Nafn"].capitalize(): int(n["Fjoldi2"]) for n in hagstofa}
@@ -100,6 +100,6 @@ if __name__ == "__main__":
 
     print("Number of names in each type-status-visible group")
     pl.Config.set_tbl_rows(25)
-    print(df.groupby(["type", "status", "visible"]).agg(pl.count()).sort(by=["type", "status", "visible"]))
+    print(df.group_by(["type", "status", "visible"]).agg(pl.count()).sort(by=["type", "status", "visible"]))
 
     # print(df.filter(pl.col("visible") == False).filter(pl.col("status") == "Sam"))

@@ -11,8 +11,8 @@ with st.expander("Atkvæði - round 1"):
     freq1, freq2 = load_name_frequencies()
     df2 = df.with_columns(
         [
-            pl.col("name").map_dict(freq1, default=-1).alias("num 1nd"),
-            pl.col("name").map_dict(freq2, default=-1).alias("num 2nd"),
+            pl.col("name").replace(freq1, default=-1).alias("num 1nd"),
+            pl.col("name").replace(freq2, default=-1).alias("num 2nd"),
 
         ]
     )
